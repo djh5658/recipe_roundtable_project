@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const PORT = 3300;
+const PORT = 3301;
 
 // Database
 const db = require('./database/db-connector');
@@ -22,7 +22,18 @@ app.set('view engine', '.hbs'); // Use handlebars engine for *.hbs files.
 // ########## ROUTE HANDLERS
 
 // READ ROUTES
+
 app.get('/', async function (req, res) {
+    try {
+        res.render('home'); // Render the home.hbs file
+    } catch (error) {
+        console.error('Error rendering page:', error);
+        // Send a generic error message to the browser
+        res.status(500).send('An error occurred while rendering the page.');
+    }
+});
+
+app.get('/users', async function (req, res) {
     try {
         // Create and execute our queries
         // In query1, we use a JOIN clause to display the names of the homeworlds
@@ -77,6 +88,29 @@ app.get('/ingredients', async function (req, res) {
         // Render the bsg-people.hbs file, and also send the renderer
         //  an object that contains our bsg_people and bsg_homeworld information
         res.render('ingredients', { ingredients: ingredients, });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/recipe-ingredients', async function (req, res) {
+    try {
+        // Create and execute our queries
+        // In query1, we use a JOIN clause to display the names of the homeworlds
+        const query1 = `SELECT ri.recipeID, r.title, ri.ingredientID, i.name, ri.quantity, ri.description \
+        FROM RecipeIngredients AS ri \
+        JOIN Recipes AS r ON ri.recipeID = r.recipeID \ 
+        JOIN Ingredients AS i ON ri.ingredientID = i.ingredientID \ 
+        ORDER BY ri.recipeID, i.name ASC;`;
+        const [recipeIngredients] = await db.query(query1);
+
+        // Render the bsg-people.hbs file, and also send the renderer
+        //  an object that contains our bsg_people and bsg_homeworld information
+        res.render('recipe-ingredients', { recipeIngredients: recipeIngredients, });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
