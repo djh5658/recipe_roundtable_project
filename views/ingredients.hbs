@@ -1,0 +1,65 @@
+<h1>Ingredients</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each ingredients.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, firstName, lastName, and Email }}
+        {{#each ingredients}}
+        <tr>
+            <td>{{this.ingredientID}}</td>
+            <td>{{this.name}}</td>
+
+
+            {{! DELETE form }}
+            <form id='delete_ingredient_form'>
+                <input type='hidden' name='delete_ingredient_id' value='{{this.instructionID}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! CREATE form }}
+<h2>Add an Ingredient</h2>
+<form class='cuForm' id='create_ingredient_form'>
+
+    <label for='create_ingredient'>Ingredient: </label>
+    <input type='text' name='create_ingredient' id='create_ingredient' required />
+
+    <input type='submit' />
+</form>
+
+{{! UPDATE form }}
+<h2>Update an Ingredient</h2>
+<form class='cuForm' id='update_ingredient_form'>
+    <label for='update_ingredient'>Ingredient ID: </label>
+    <select name='update_update_ingredient' id='update_update_ingredient' required>
+        <option value='' disabled selected>Select an Ingredient</option>
+        {{#each ingredient}}
+        <option value='{{this.ingredient}}' required>
+            {{this.ingredientID}}
+            {{/each}}
+    </select>
+
+    <label for='update_ingredient'>Recipe Instruction: </label>
+    <input type='text' name='update_ingredient' id='update_ingredient' required />
+
+    <input type='submit' />
+</form>
