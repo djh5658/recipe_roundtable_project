@@ -5,11 +5,12 @@
     <thead>
         {{! For the table header row, we print the DB attribute names }}
         <tr>
-            {{#each recipeIngredients.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
+            <th>Recipe ID</th>
+            <th>Recipe</th>
+            <th>Ingredient ID</th>
+            <th>Ingredient Name</th>
+            <th>Quantity</th>
+            <th>Ingredient Notes</th>
             <th></th>
         </tr>
     </thead>
