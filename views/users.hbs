@@ -23,7 +23,7 @@
             <td>{{this.email}}</td>
 
             {{! DELETE form }}
-            <form id='delete_person_form'>
+            <form id='delete_person_form' method='POST' action='/users/delete'>
                 <input type='hidden' name='delete_person_id' value='{{this.userID}}' />
                 <input type='hidden' name='delete_person_name' value='{{this.firstName}} {{this.lastName}}' />
                 <td>
@@ -39,7 +39,7 @@
 
 {{! CREATE form }}
 <h2>Create a User</h2>
-<form class='cuForm' id='create_user_form'>
+<form class='cuForm' id='create_user_form' method='POST' action='/users/create'>
     <label for='create_user_firstName'>First Name: </label>
     <input type='text' name='create_user_firstName' id='create_user_firstName' required />
 
@@ -54,7 +54,7 @@
 
 {{! UPDATE form }}
 <h2>Update a User</h2>
-<form class='cuForm' id='update_user_form'>
+<form class='cuForm' id='update_user_form' method='POST' action='/users/update'>
     <label for='update_user_id'>User to Update: </label>
     <select name='update_user_id' id='update_user_id' required>
         <option value='' disabled selected>Select a User</option>

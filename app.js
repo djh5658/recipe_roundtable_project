@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const PORT = 3301;
+const PORT = 3300;
 
 // Database
 const db = require('./database/db-connector');
@@ -55,9 +55,9 @@ app.get('/users', async function (req, res) {
 app.get('/recipes', async function (req, res) {
     try {
         // Create and execute our queries
-        // In query1, we use a JOIN clause to display the names of the homeworlds
+
         const query1 = `SELECT Recipes.recipeID, CONCAT(Users.firstName, ' ', Users.lastName) AS 'user', \
-        Recipes.title, Recipes.description, Recipes.createdOn, Recipes.modifiedOn \
+        Recipes.userID, Recipes.title, Recipes.description, Recipes.createdOn, Recipes.modifiedOn \
         FROM Recipes JOIN Users ON Recipes.UserID = Users.UserID;`;
         const query2 = `SELECT r.recipeID, r.title, i.sortOrder, i.instructionText \
         FROM Recipes AS r \
@@ -66,8 +66,8 @@ app.get('/recipes', async function (req, res) {
         const [recipes] = await db.query(query1);
         const [recipeDetails] = await db.query(query2)
 
-        // Render the bsg-people.hbs file, and also send the renderer
-        //  an object that contains our bsg_people and bsg_homeworld information
+        // Render the recips.hbs file, and also send the renderer
+        //  an object that contains our recipe information
         res.render('recipes', { recipes: recipes, recipeDetails: recipeDetails });
     } catch (error) {
         console.error('Error executing queries:', error);
@@ -135,6 +135,129 @@ app.get('/instructions', async function (req, res) {
         // Render the bsg-people.hbs file, and also send the renderer
         //  an object that contains our bsg_people and bsg_homeworld information
         res.render('instructions', { instructions: instructions, recipes: recipes });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// Reset Tables
+app.post('/reset', async function (req, res) {
+    try {
+        // Call the stored procedure
+        const [reset] = await db.query('CALL sp_ResetTable();');
+
+        console.log('Table Successfully Reset');
+
+        // Redirect the user to the updated webpage
+        res.render('home');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        res.status(500).send('An error occurred while executing the database queries.');
+    }
+});
+
+// # Citation for the following function:
+// # Date: 5/21/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
+// CREATE ROUTES
+app.post('/users/create', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our queries
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_CreateUser(?, ?, ?, @new_user_id);`;
+
+        // Store ID of last inserted row
+        const [[[rows]]] = await db.query(query1, [
+            data.create_user_firstName,
+            data.create_user_lastName,
+            data.create_user_email,
+        ]);
+
+        console.log(`CREATE user. ID: ${rows.new_user_id} ` +
+            `Name: ${data.create_user_firstName} ${data.create_user_lastName}`
+        );
+
+        // Redirect the user to the updated webpage
+        res.redirect('/users');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
+// # Date: 5/21/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+// UPDATE ROUTES
+app.post('/users/update', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = 'CALL sp_UpdateUser(?, ?, ?, ?);';
+        const query2 = 'SELECT firstName, lastName, email FROM Users WHERE UserID = ?;';
+        await db.query(query1, [
+            data.update_user_id,
+            data.update_user_firstName,
+            data.update_user_lastName,
+            data.update_user_email,
+        ]);
+        const [[rows]] = await db.query(query2, [data.update_user_id]);
+
+        console.log(`UPDATE Users. ID: ${data.update_user_id} ` +
+            `Name: ${rows.firstName} ${rows.lastName}`
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/users');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
+// # Date: 5/21/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+// DELETE ROUTES
+app.post('/users/delete', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_DeleteUser(?);`;
+        await db.query(query1, [data.delete_person_id]);
+
+        console.log(`DELETE user. ID: ${data.delete_person_id} ` +
+            `Name: ${data.delete_person_name}`
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/users');
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
