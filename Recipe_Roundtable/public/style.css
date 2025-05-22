@@ -1,0 +1,79 @@
+body {
+    background-color: #FFFF99;
+    color: #000d80;
+    font-family: "Georgia";
+}
+
+h1,
+h2 {
+    margin-left: 16px;
+    font-family: "Lucida Handwriting"
+}
+
+table {
+    border-collapse: collapse;
+    margin-left: 32px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(odd) {
+    background-color: #cecece;
+}
+
+.cuForm {
+    margin-left: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+input,
+select {
+    margin-bottom: 4px;
+    margin-right: 12px;
+    width: 30%;
+
+}
+
+input[type='submit'] {
+    width: 15%;
+}
+
+textarea {
+    width: 80%;
+}
+
+nav {
+    background-color: #000d80;
+    color: #FFFF99;
+    padding: 16px;
+    border-radius: 5px;
+}
+
+a {
+    margin-left: 16px;
+    color: #FFFF99;
+}
+
+a:visited {
+    color: #FFD345;
+}
+
+.homepage_description {
+    margin-left: 16px;
+}
