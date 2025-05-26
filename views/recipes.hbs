@@ -16,22 +16,22 @@
 
     <tbody>
         {{#each recipes}}
-            <tr>
-                <td>{{this.recipeID}}</td>
-                <td>{{this.userID}}</td>
-                <td>{{this.title}}</td>
-                <td>{{this.description}}</td>
-                <td>{{this.createdOn}}</td>
-                <td>{{this.modifiedOn}}</td>
+        <tr>
+            <td>{{this.recipeID}}</td>
+            <td>{{this.userID}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.createdOn}}</td>
+            <td>{{this.modifiedOn}}</td>
 
-                {{! DELETE form }}
-                <td>
-                    <form id='delete_recipe_form' method="POST" action="/delete_recipe">
-                        <input type='hidden' name='delete_recipe_id' value='{{this.recipeID}}' />
-                        <button type='submit'>Delete</button>
-                    </form>
-                </td>
-            </tr>
+            {{! DELETE form }}
+            <td>
+                <form id='delete_recipe_form' method="POST" action="/recipes/delete">
+                    <input type='hidden' name='delete_recipe_id' value='{{this.recipeID}}' />
+                    <button type='submit'>Delete</button>
+                </form>
+            </td>
+        </tr>
         {{/each}}
     </tbody>
 </table>
@@ -52,45 +52,53 @@
 
     <tbody>
         {{#each recipeDetails}}
-            <tr>
-                <td>{{this.recipeID}}</td>
-                <td>{{this.title}}</td>
-                <td>{{this.sortOrder}}</td>
-                <td>{{this.instructionText}}</td>
+        <tr>
+            <td>{{this.recipeID}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.sortOrder}}</td>
+            <td>{{this.instructionText}}</td>
 
-                {{! DELETE form for recipe details (if needed) }}
-                <td>
-                    <form id='delete_recipe_detail_form' method="POST" action="/delete_recipe_detail">
-                        <input type='hidden' name='delete_recipe_detail_id' value='{{this.recipeID}}' />
-                        <button type='submit'>Delete</button>
-                    </form>
-                </td>
-            </tr>
+            {{! DELETE form for recipe details (if needed) }}
+            <td>
+                <form id='delete_recipe_detail_form' method="POST" action="/delete_recipe_detail">
+                    <input type='hidden' name='delete_recipe_detail_id' value='{{this.recipeID}}' />
+                    <button type='submit'>Delete</button>
+                </form>
+            </td>
+        </tr>
         {{/each}}
     </tbody>
 </table>
 
 {{! CREATE form }}
 <h2>Create a Recipe</h2>
-<form class='cuForm' id='create_recipe_form'>
+<form class='cuForm' id='create_recipe_form' method='POST' action='/recipes/create'>
 
-    <label for='create_recipe_user'>Email: </label>
-    <input type='text' name='create_recipe_user' id='create_recipe_user' required />
+    <label for='create_recipe_user'>User ID: </label>
+    <select name='create_recipe_user' id='create_recipe_user' required>
+        <option value='' disabled selected>Select a user</option>
+        {{#each recipes}}
+        <option value='{{this.userID}}' required>
+            {{this.userID}}
+        </option>
+        {{/each}}
+    </select>
 
     <label for='create_recipe_title'>Recipe Title: </label>
     <input type='text' name='create_recipe_title' id='create_recipe_title' required />
 
     <label for='create_recipe_description'>Recipe Description: </label>
-    <textarea id="create_recipe_description" name="create_recipe_description" rows="3" cols="50" placeholder="Enter recipe Description here..."></textarea>
+    <textarea id="create_recipe_description" name="create_recipe_description" rows="3" cols="50"
+        placeholder="Enter recipe Description here..."></textarea>
 
     <input type='submit' />
 </form>
 
 {{! UPDATE form }}
 <h2>Update a Recipe</h2>
-<form class='cuForm' id='update_recipe_form'>
-    <label for='update_recipe'>Recipe to Update:</label>
-    <select name='update_recipe' id='update_recipe' required>
+<form class='cuForm' id='update_recipe_form' method='POST' action='/recipes/update'>
+    <label for='update_recipe_id'>Recipe to Update:</label>
+    <select name='update_recipe_id' id='update_recipe_id' required>
         <option value='' disabled selected>Select a Recipe</option>
         {{#each recipes}}
         <option value='{{this.recipeID}}' required>
@@ -103,7 +111,8 @@
     <input type='text' name='update_recipe_title' id='update_recipe_title' required />
 
     <label for='update_recipe_description'>Recipe Description: </label>
-    <textarea id="update_recipe_description" name="update_recipe_description" rows="3" cols="50" placeholder="Enter updated recipe Description here..."></textarea>
+    <textarea id="update_recipe_description" name="update_recipe_description" rows="3" cols="50"
+        placeholder="Enter updated recipe Description here..."></textarea>
 
 
     <input type='submit' />

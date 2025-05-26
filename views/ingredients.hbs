@@ -12,7 +12,7 @@
     </thead>
 
     <tbody>
-        {{! For each row, print the id, firstName, lastName, and Email }}
+        {{! For each row, print the ingredientId and name }}
         {{#each ingredients}}
         <tr>
             <td>{{this.ingredientID}}</td>
@@ -20,8 +20,9 @@
 
 
             {{! DELETE form }}
-            <form id='delete_ingredient_form'>
-                <input type='hidden' name='delete_ingredient_id' value='{{this.instructionID}}' />
+            <form id='delete_ingredient_form' method='POST' action='/ingredients/delete'>
+                <input type='hidden' name='delete_ingredient_id' value='{{this.ingredientID}}' />
+                <input type='hidden' name='delete_ingredient_name' value='{{this.name}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -35,7 +36,7 @@
 
 {{! CREATE form }}
 <h2>Add an Ingredient</h2>
-<form class='cuForm' id='create_ingredient_form'>
+<form class='cuForm' id='create_ingredient_form' method='POST' action='/ingredients/create'>
 
     <label for='create_ingredient'>Ingredient: </label>
     <input type='text' name='create_ingredient' id='create_ingredient' required />
@@ -45,18 +46,19 @@
 
 {{! UPDATE form }}
 <h2>Update an Ingredient</h2>
-<form class='cuForm' id='update_ingredient_form'>
-    <label for='update_ingredient'>Ingredient ID: </label>
-    <select name='update_update_ingredient' id='update_update_ingredient' required>
+<form class='cuForm' id='update_ingredient_form' method='POST' action='/ingredients/update'>
+    <label for='update_ingredient_id'>Ingredient ID: </label>
+    <select name='update_ingredient_id' id='update_ingredient_id' required>
         <option value='' disabled selected>Select an Ingredient</option>
-        {{#each ingredient}}
-        <option value='{{this.ingredient}}' required>
+        {{#each ingredients}}
+        <option value='{{this.ingredientID}}' required>
             {{this.ingredientID}}
-            {{/each}}
+        </option>
+        {{/each}}
     </select>
 
-    <label for='update_ingredient'>Recipe Instruction: </label>
-    <input type='text' name='update_ingredient' id='update_ingredient' required />
+    <label for='update_ingredient_name'>Recipe Ingredient: </label>
+    <input type='text' name='update_ingredient_name' id='update_ingredient_name' required />
 
     <input type='submit' />
 </form>

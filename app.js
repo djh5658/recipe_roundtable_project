@@ -199,6 +199,79 @@ app.post('/users/create', async function (req, res) {
 });
 
 // # Citation for the following function:
+// # Date: 5/24/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
+// CREATE ROUTES
+app.post('/recipes/create', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our queries
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_CreateRecipe(?, ?, ?, @new_recipe_id);`;
+
+        // Store ID of last inserted row
+        const [[[rows]]] = await db.query(query1, [
+            data.create_recipe_user,
+            data.create_recipe_title,
+            data.create_recipe_description,
+        ]);
+
+        console.log(`CREATE recipe. ID: ${rows.new_recipe_id} ` +
+            `Name: ${data.create_recipe_title}`
+        );
+
+        // Redirect the user to the updated webpage
+        res.redirect('/recipes');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
+// # Date: 5/24/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
+app.post('/ingredients/create', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our queries
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_CreateIngredient(?, @new_ingredient_id);`;
+
+        // Store ID of last inserted row
+        const [[[rows]]] = await db.query(query1, [
+            data.create_ingredient,
+        ]);
+
+        console.log(`CREATE ingredient. ID: ${rows.new_ingredient_id} ` +
+            `Ingredient: ${data.create_ingredient}`
+        );
+
+        // Redirect the user to the updated webpage
+        res.redirect('/ingredients');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
 // # Date: 5/21/2025
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
@@ -237,6 +310,78 @@ app.post('/users/update', async function (req, res) {
 });
 
 // # Citation for the following function:
+// # Date: 5/24/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+// UPDATE ROUTES
+app.post('/recipes/update', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = 'CALL sp_UpdateRecipe(?, ?, ?);';
+        const query2 = 'SELECT title, description FROM Recipes WHERE recipeID = ?;';
+        await db.query(query1, [
+            data.update_recipe_id,
+            data.update_recipe_title,
+            data.update_recipe_description
+        ]);
+        const [[rows]] = await db.query(query2, [data.update_recipe_id]);
+
+        console.log(`UPDATE recipe. ID: ${data.update_recipe_id} ` +
+            `Name: ${rows.title}`
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/recipes');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
+// # Date: 5/24/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+app.post('/ingredients/update', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = 'CALL sp_UpdateIngredient(?, ?);';
+        const query2 = 'SELECT name FROM Ingredients WHERE ingredientID = ?;';
+        await db.query(query1, [
+            data.update_ingredient_id,
+            data.update_ingredient_name
+        ]);
+        const [[rows]] = await db.query(query2, [data.update_ingredient_id]);
+
+        console.log(`UPDATE Ingredient. ID: ${data.update_ingredient_id} ` +
+            `Name: ${rows.name}`
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/ingredients');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
 // # Date: 5/21/2025
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
@@ -258,6 +403,65 @@ app.post('/users/delete', async function (req, res) {
 
         // Redirect the user to the updated webpage data
         res.redirect('/users');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
+// # Date: 5/25/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+app.post('/recipes/delete', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_DeleteRecipe(?);`;
+        await db.query(query1, [data.delete_recipe_id]);
+
+        console.log(`DELETE recipe. ID: ${data.delete_recipe_id} `
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/recipes');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// # Citation for the following function:
+// # Date: 5/21/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+app.post('/ingredients/delete', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_DeleteIngredient(?);`;
+        await db.query(query1, [data.delete_ingredient_id]);
+
+        console.log(`DELETE Ingredient. ID: ${data.delete_ingredient_id} ` +
+            `Name: ${data.delete_ingredient_name}`
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/ingredients');
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
