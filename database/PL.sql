@@ -93,6 +93,69 @@ END //
 DELIMITER ;
 
 -- # Citation for the following function:
+-- # Date: 5/27/2025
+-- # Copied from /OR/ Adapted from /OR/ Based on:
+-- # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
+-- #############################
+-- CREATE RecipeIngredient
+-- #############################
+DROP PROCEDURE IF EXISTS sp_CreateRI;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_CreateRI(
+    IN p_recipe_title VARCHAR(200), 
+    IN p_ingredient_name VARCHAR(50), 
+    IN p_quantity VARCHAR(50), 
+    IN p_description VARCHAR(150),  
+    OUT p_riID INT)
+BEGIN
+    INSERT INTO RecipeIngredients (recipeID, ingredientID, quantity, description) 
+    VALUES ((SELECT Recipes.recipeID FROM Recipes WHERE Recipes.title = p_recipe_title), (SELECT Ingredients.ingredientID FROM Ingredients WHERE Ingredients.name = p_ingredient_name), p_quantity, p_description);
+
+ -- Store the ID of the last inserted row
+    SELECT LAST_INSERT_ID() into p_riID;
+    -- Display the ID of the last inserted ingredient
+    SELECT LAST_INSERT_ID() AS 'new_ri_id';
+
+END //
+
+DELIMITER ;
+
+-- # Citation for the following function:
+-- # Date: 5/27/2025
+-- # Copied from /OR/ Adapted from /OR/ Based on:
+-- # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
+-- #############################
+-- CREATE Instruction
+-- #############################
+DROP PROCEDURE IF EXISTS sp_CreateInstruction;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_CreateInstruction(
+    IN p_recipe_title VARCHAR(200),
+    IN p_instructionText VARCHAR(2000), 
+    IN p_sortOrder INT, 
+    OUT p_instructionID INT)
+BEGIN
+    INSERT INTO Instructions (recipeID, instructionText, sortOrder) 
+    VALUES ((SELECT Recipes.recipeID FROM Recipes WHERE Recipes.title = p_recipe_title), p_instructionText, p_sortOrder);
+
+    -- Store the ID of the last inserted row
+    SELECT LAST_INSERT_ID() into p_instructionID;
+    -- Display the ID of the last inserted person.
+    SELECT LAST_INSERT_ID() AS 'new_instruction_id';
+
+END //
+
+DELIMITER ;
+
+-- # Citation for the following function:
 -- # Date: 5/21/2025
 -- # Copied from /OR/ Adapted from /OR/ Based on:
 -- # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
@@ -147,6 +210,45 @@ CREATE PROCEDURE sp_UpdateIngredient(
 
 BEGIN
     UPDATE Ingredients SET name = p_name WHERE ingredientID = p_ingredientID; 
+END //
+DELIMITER ;
+
+-- # Citation for the following function:
+-- # Date: 5/27/2025
+-- # Copied from /OR/ Adapted from /OR/ Based on:
+-- # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
+-- #############################
+-- UPDATE RecipeInstruction
+-- #############################
+DROP PROCEDURE IF EXISTS sp_UpdateRI;
+
+DELIMITER //
+CREATE PROCEDURE sp_UpdateRI(IN p_riID INT, IN p_recipe_title VARCHAR(200), IN p_ingredient_name VARCHAR(50), IN p_quantity VARCHAR(50), IN p_description VARCHAR(150))
+
+BEGIN
+    UPDATE RecipeIngredients SET recipeID = (SELECT Recipes.recipeID FROM Recipes WHERE Recipes.title = p_recipe_title), ingredientID = (SELECT Ingredients.ingredientID FROM Ingredients WHERE Ingredients.name = p_ingredient_name), quantity = p_quantity, description = p_description WHERE recipeIngredientID = p_riID; 
+END //
+DELIMITER ;
+
+-- # Citation for the following function:
+-- # Date: 5/27/2025
+-- # Copied from /OR/ Adapted from /OR/ Based on:
+-- # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
+-- #############################
+-- UPDATE Instruction
+-- #############################
+DROP PROCEDURE IF EXISTS sp_UpdateInstruction;
+
+DELIMITER //
+CREATE PROCEDURE sp_UpdateInstruction(IN p_instructionID INT, IN p_recipe_title VARCHAR(200), IN p_instructionText VARCHAR(2000), IN p_sortOrder INT)
+
+BEGIN
+    UPDATE Instructions SET  recipeID = (SELECT Recipes.recipeID FROM Recipes WHERE Recipes.title = p_recipe_title), instructionText = p_instructionText,
+        sortOrder = p_sortOrder WHERE instructionID = p_instructionID; 
 END //
 DELIMITER ;
 
@@ -271,6 +373,86 @@ BEGIN
         -- ROW_COUNT() returns the number of rows affected by the preceding statement.
         IF ROW_COUNT() = 0 THEN
             set error_message = CONCAT('No matching record found in Ingredients for id: ', p_ingredientID);
+            -- Trigger custom error, invoke EXIT HANDLER
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+        END IF;
+
+    COMMIT;
+
+END //
+DELIMITER ;
+
+-- # Citation for the following function:
+-- # Date: 5/28/2025
+-- # Copied from /OR/ Adapted from /OR/ Based on:
+-- # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+-- #############################
+-- DELETE RecipeInstruction
+-- #############################
+DROP PROCEDURE IF EXISTS sp_DeleteRI;
+
+DELIMITER //
+CREATE PROCEDURE sp_DeleteRI(IN p_riID INT)
+BEGIN
+    DECLARE error_message VARCHAR(255); 
+
+    -- error handling
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Roll back the transaction on any error
+        ROLLBACK;
+        -- Propogate the custom error message to the caller
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+        
+        DELETE FROM RecipeIngredients WHERE recipeIngredientID = p_riID;
+
+        -- ROW_COUNT() returns the number of rows affected by the preceding statement.
+        IF ROW_COUNT() = 0 THEN
+            set error_message = CONCAT('No matching record found in RecipeIngredients for id: ', p_riID);
+            -- Trigger custom error, invoke EXIT HANDLER
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+        END IF;
+
+    COMMIT;
+
+END //
+DELIMITER ;
+
+-- # Citation for the following function:
+-- # Date: 5/28/2025
+-- # Copied from /OR/ Adapted from /OR/ Based on:
+-- # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+-- #############################
+-- DELETE Instruction
+-- #############################
+DROP PROCEDURE IF EXISTS sp_DeleteInstruction;
+
+DELIMITER //
+CREATE PROCEDURE sp_DeleteInstruction(IN p_instructionID INT)
+BEGIN
+    DECLARE error_message VARCHAR(255); 
+
+    -- error handling
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Roll back the transaction on any error
+        ROLLBACK;
+        -- Propogate the custom error message to the caller
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+        
+        DELETE FROM Instructions WHERE instructionID = p_instructionID;
+
+        -- ROW_COUNT() returns the number of rows affected by the preceding statement.
+        IF ROW_COUNT() = 0 THEN
+            set error_message = CONCAT('No matching record found in Instructions for id: ', p_instructionID);
             -- Trigger custom error, invoke EXIT HANDLER
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
         END IF;
