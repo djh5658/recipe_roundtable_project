@@ -2,98 +2,179 @@
 
 {{! READ table }}
 <table>
-    <thead>
-        {{! For the table header row, we print the DB attribute names }}
-        <tr>
-            <th>Instruction ID</th>
-            <th>Recipe</th>
-            <th>Instruction</th>
-            <th>Step Number</th>
-            <th></th>
-        </tr>
-    </thead>
+  <thead>
+    {{! For the table header row, we print the DB attribute names }}
+    <tr>
+      <th>Instruction ID</th>
+      <th>Recipe</th>
+      <th>Instruction</th>
+      <th>Step Number</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
 
-    <tbody>
-        {{! For each row, print the id, firstName, lastName, and Email }}
-        {{#each instructions}}
-        <tr>
-            <td>{{this.instructionID}}</td>
-            <td>{{this.title}}</td>
-            <td>{{this.instructionText}}</td>
-            <td>{{this.sortOrder}}</td>
+  <tbody>
+    {{! For each row, print the id, firstName, lastName, and Email }}
+    {{#each instructions}}
+      <tr>
+        <td>{{this.instructionID}}</td>
+        <td>{{this.title}}</td>
+        <td>{{this.instructionText}}</td>
+        <td>{{this.sortOrder}}</td>
 
-            {{! DELETE form }}
-            <form id='delete_person_form' method='POST' action='/instructions/delete'>
-                <input type='hidden' name='delete_instruction_id' value='{{this.instructionID}}' />
-                <input type='hidden' name='delete_instruction' value='{{this.instructionText}}' />
-                <input type='hidden' name='delete_sort_order' value='{{this.sortOrder}}' />
-                <td>
-                    <button type='submit'>
-                        Delete
-                    </button>
-                </td>
-            </form>
-        </tr>
-        {{/each}}
-    </tbody>
+        {{! DELETE form }}
+        <form
+          id="delete_person_form"
+          method="POST"
+          action="/instructions/delete"
+        >
+          <input
+            type="hidden"
+            name="delete_instruction_id"
+            value="{{this.instructionID}}"
+          />
+          <input
+            type="hidden"
+            name="delete_instruction"
+            value="{{this.instructionText}}"
+          />
+          <input
+            type="hidden"
+            name="delete_sort_order"
+            value="{{this.sortOrder}}"
+          />
+          <td>
+            <button type="submit">
+              Delete
+            </button>
+            <button
+              type="button"
+              class="update-button"
+              data-type="instruction"
+              data-instructionid="{{this.instructionID}}"
+              data-instructiontitle="{{this.title}}"
+              data-text="{{this.instructionText}}"
+              data-sort="{{this.sortOrder}}"
+              data-recipe="{{this.title}}"
+            >
+              Edit
+            </button>
+          </td>
+        </form>
+      </tr>
+    {{/each}}
+  </tbody>
 </table>
 
-{{! CREATE form }}
-<h2>Create an Instruction</h2>
-<form class='cuForm' id='create_instruction_form' method='POST' action='/instructions/create'>
+<div class="new-button">
+  <button id="createInstructionBtn">New Instruction</button>
+</div>
 
-    <label for='create_instruction_recipe_title'>Recipe: </label>
-    <select name='create_instruction_recipe_title' id='create_instruction_recipe_title' required>
-        <option value='' disabled selected>Select a Recipe</option>
-        {{#each instructions}}
-        <option value='{{this.title}}' required>
-            {{this.recipeID}}
-            -
-            {{this.title}}
+{{! CREATE form }}
+<div class="create-section hidden">
+  <h2>Create an Instruction</h2>
+  <form
+    class="cuForm"
+    id="create_instruction_form"
+    method="POST"
+    action="/instructions/create"
+  >
+
+    <label for="create_instruction_recipe_title">Recipe: </label>
+    <select
+      name="create_instruction_recipe_title"
+      id="create_instruction_recipe_title"
+      required
+    >
+      <option value="" disabled selected>Select a Recipe</option>
+      {{#each instructions}}
+        <option value="{{this.title}}" required>
+          {{this.recipeID}}
+          -
+          {{this.title}}
         </option>
-        {{/each}}
+      {{/each}}
     </select>
 
-    <label for='create_instruction_text'>Recipe Instruction: </label>
-    <textarea id="create_instruction_text" name="create_instruction_text" rows="3" cols="50"
-        placeholder="Enter instruction text here..."></textarea>
+    <label for="create_instruction_text">Recipe Instruction: </label>
+    <textarea
+      id="create_instruction_text"
+      name="create_instruction_text"
+      rows="3"
+      cols="50"
+      placeholder="Enter instruction text here..."
+    ></textarea>
 
-    <label for='create_instruction_sort_order'>Recipe Step Number: </label>
-    <input type='text' name='create_instruction_sort_order' id='create_instruction_sort_order' required />
+    <label for="create_instruction_sort_order">Recipe Step Number: </label>
+    <input
+      type="text"
+      name="create_instruction_sort_order"
+      id="create_instruction_sort_order"
+      required
+    />
 
-    <input type='submit' />
-</form>
+    <div>
+      <input class="save-button" type="submit" value="Submit" />
+      <button
+        class="cancel-button"
+        type="button"
+        id="cancel-button"
+      >Cancel</button>
+    </div>
+  </form>
+</div>
 
 {{! UPDATE form }}
-<h2>Update an Instruction Step</h2>
-<form class='cuForm' id='update_instruction_form' method='POST' action='/instructions/update'>
-    <label for='update_instruction_id'>Instruction ID: </label>
-    <select name='update_instruction_id' id='update_instruction_id' required>
-        <option value='' disabled selected>Select an Instruction</option>
-        {{#each instructions}}
-        <option value='{{this.instructionID}}' required>
-            {{this.instructionID}}
-            {{/each}}
-    </select>
+<div class="update-section hidden">
+  <h2>Update an Instruction Step</h2>
+  <form
+    class="cuForm"
+    id="update_instruction_form"
+    method="POST"
+    action="/instructions/update"
+  >
+    <label for="update_instruction_id">Instruction ID: </label>
+    <input
+      type="text"
+      name="update_instruction_id"
+      id="update_instruction_id"
+      readonly
+      required
+    />
 
-    <label for='update_instruction_recipe_title'>Recipe: </label>
-    <select name='update_instruction_recipe_title' id='update_instruction_recipe_title' required>
-        <option value='' disabled selected>Select a Recipe</option>
-        {{#each instructions}}
-        <option value='{{this.title}}' required>
-            {{this.recipeID}}
-            -
-            {{this.title}}
-        </option>
-        {{/each}}
-    </select>
+    <label for="update_instruction_recipe_title">Recipe: </label>
+    <input
+      type="text"
+      name="update_instruction_recipe_title"
+      id="update_instruction_recipe_title"
+      readonly
+      required
+    />
 
-    <label for='update_instruction_text'>Recipe Instruction: </label>
-    <textarea id="update_instruction_text" name="update_instruction_text" rows="3" cols="50"
-        placeholder="Enter new instruction text here..."></textarea>
+    <label for="update_instruction_text">Recipe Instruction: </label>
+    <textarea
+      id="update_instruction_text"
+      name="update_instruction_text"
+      rows="3"
+      cols="50"
+      placeholder="Enter new instruction text here..."
+    ></textarea>
 
-    <label for='update_instruction_sort_order'>Recipe Step Number: </label>
-    <input type='text' name='update_instruction_sort_order' id='update_instruction_sort_order' required />
+    <label for="update_instruction_sort_order">Recipe Step Number: </label>
+    <input
+      type="text"
+      name="update_instruction_sort_order"
+      id="update_instruction_sort_order"
+      required
+    />
 
-    <input type='submit' />
-</form>
+    <div>
+      <input class="save-button" type="submit" value="Submit" />
+      <button
+        class="cancel-button"
+        type="button"
+        id="cancel-button"
+      >Cancel</button>
+    </div>
+  </form>
+</div>

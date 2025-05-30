@@ -29,6 +29,9 @@
                 <form id='delete_recipe_form' method="POST" action="/recipes/delete">
                     <input type='hidden' name='delete_recipe_id' value='{{this.recipeID}}' />
                     <button type='submit'>Delete</button>
+                    <button type="button" class="update-button" data-type='recipe' data-userid="{{this.userID}}" data-recipeid="{{this.recipeID}}" data-title="{{this.title}}" data-recipedesc="{{this.description}}">
+                        Edit
+                    </button>
                 </form>
             </td>
         </tr>
@@ -36,84 +39,64 @@
     </tbody>
 </table>
 
-<h2>Recipe Details</h2>
 
-{{! Recipe Details Table }}
-<table>
-    <thead>
-        <tr>
-            <th>Recipe ID</th>
-            <th>Title</th>
-            <th>Sort Order</th>
-            <th>Instruction Text</th>
-            <th>Actions</th> <!-- Add column for actions -->
-        </tr>
-    </thead>
-
-    <tbody>
-        {{#each recipeDetails}}
-        <tr>
-            <td>{{this.recipeID}}</td>
-            <td>{{this.title}}</td>
-            <td>{{this.sortOrder}}</td>
-            <td>{{this.instructionText}}</td>
-
-            {{! DELETE form for recipe details (if needed) }}
-            <td>
-                <form id='delete_recipe_detail_form' method="POST" action="/delete_recipe_detail">
-                    <input type='hidden' name='delete_recipe_detail_id' value='{{this.recipeID}}' />
-                    <button type='submit'>Delete</button>
-                </form>
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+<div class="new-button">
+    <button id="createRecipeBtn">New Recipe</button>
+</div>
 
 {{! CREATE form }}
-<h2>Create a Recipe</h2>
-<form class='cuForm' id='create_recipe_form' method='POST' action='/recipes/create'>
+<div class="create-section hidden">
+    <h2>Create a Recipe</h2>
+    <form class='cuForm' id='create_recipe_form' method='POST' action='/recipes/create'>
 
-    <label for='create_recipe_user'>User ID: </label>
-    <select name='create_recipe_user' id='create_recipe_user' required>
-        <option value='' disabled selected>Select a user</option>
-        {{#each recipes}}
-        <option value='{{this.userID}}' required>
-            {{this.userID}}
-        </option>
-        {{/each}}
-    </select>
+        <label for='create_recipe_user'>User ID: </label>
+        <select name='create_recipe_user' id='create_recipe_user' required>
+            <option value='' disabled selected>Select a user</option>
+            {{#each recipes}}
+            <option value=`{{this.user}}` required>
+                {{this.user}} - {{this.userID}}
+            </option>
+            {{/each}}
+        </select>
 
-    <label for='create_recipe_title'>Recipe Title: </label>
-    <input type='text' name='create_recipe_title' id='create_recipe_title' required />
+        <label for='create_recipe_title'>Recipe Title: </label>
+        <input type='text' name='create_recipe_title' id='create_recipe_title' required />
 
-    <label for='create_recipe_description'>Recipe Description: </label>
-    <textarea id="create_recipe_description" name="create_recipe_description" rows="3" cols="50"
-        placeholder="Enter recipe Description here..."></textarea>
+        <label for='create_recipe_description'>Recipe Description: </label>
+        <textarea id="create_recipe_description" name="create_recipe_description" rows="3" cols="50" placeholder="Enter recipe Description here..."></textarea>
 
-    <input type='submit' />
-</form>
+        <div>
+            <input class='save-button' type='submit' value="Submit" />
+            <button class='cancel-button' type="button" id="cancel-button">Cancel</button>
+        </div>
+    </form>
+</div>
 
-{{! UPDATE form }}
-<h2>Update a Recipe</h2>
-<form class='cuForm' id='update_recipe_form' method='POST' action='/recipes/update'>
-    <label for='update_recipe_id'>Recipe to Update:</label>
-    <select name='update_recipe_id' id='update_recipe_id' required>
-        <option value='' disabled selected>Select a Recipe</option>
-        {{#each recipes}}
-        <option value='{{this.recipeID}}' required>
-            {{this.recipeID}}
-        </option>
-        {{/each}}
-    </select>
+<div class="update-section hidden">
+    {{! UPDATE form }}
+    <h2>Update a Recipe</h2>
+    <form class='cuForm' id='update_recipe_form' method='POST' action='/recipes/update'>
+    <label for='update_recipe_id'>Recipe to Update: </label>
+  <input
+    type='text'
+    name='update_recipe_id'
+    id='update_recipe_id'
+    readonly
+    required
+  />
+  <label for="update_user_id">User ID: </label>
+<input type="text" id="update_user_id" name="update_user_id" readonly />
 
-    <label for='update_recipe_title'>Recipe Title: </label>
-    <input type='text' name='update_recipe_title' id='update_recipe_title' required />
+        <label for='update_recipe_title'>Recipe Title: </label>
+        <input type='text' name='update_recipe_title' id='update_recipe_title' required />
 
-    <label for='update_recipe_description'>Recipe Description: </label>
-    <textarea id="update_recipe_description" name="update_recipe_description" rows="3" cols="50"
-        placeholder="Enter updated recipe Description here..."></textarea>
+        <label for='update_recipe_description'>Recipe Description: </label>
+        <textarea id="update_recipe_description" name="update_recipe_description" rows="3" cols="50" placeholder="Enter updated recipe Description here..."></textarea>
 
 
-    <input type='submit' />
-</form>
+        <div>
+            <input class='save-button' type='submit' value="Submit" />
+            <button class='cancel-button' type="button" id="cancel-button">Cancel</button>
+        </div>
+    </form>
+</div>

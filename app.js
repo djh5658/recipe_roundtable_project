@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const PORT = 3302;
+const PORT = 3300;
 
 // Database
 const db = require('./database/db-connector');
@@ -101,11 +101,12 @@ app.get('/recipe-ingredients', async function (req, res) {
     try {
         // Create and execute our queries
 
-        const query = `SELECT * FROM RecipeIngredients`;
+        const query = `SELECT DISTINCT ri.recipeID, r.title FROM RecipeIngredients AS ri JOIN Recipes AS r ON r.recipeID = ri.RecipeID`;
         const query1 = `SELECT RecipeIngredients.recipeIngredientID, Recipes.recipeID, Recipes.title, Ingredients.ingredientID, Ingredients.name, 
         RecipeIngredients.quantity, RecipeIngredients.description FROM RecipeIngredients
         JOIN Recipes ON RecipeIngredients.recipeID = Recipes.recipeID
         JOIN Ingredients ON RecipeIngredients.ingredientID = Ingredients.ingredientID;`;
+        const [recipes] = await db.query(query);
         const [recipeIngredients] = await db.query(query1);
 
         // Render the bsg-people.hbs file, and also send the renderer
@@ -696,3 +697,4 @@ app.listen(PORT, function () {
         '; press Ctrl-C to terminate.'
     );
 });
+

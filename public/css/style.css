@@ -54,6 +54,10 @@ input[type='submit'] {
     width: 15%;
 }
 
+#cancel-button {
+    width: 15%;
+}
+
 textarea {
     width: 80%;
 }
@@ -76,4 +80,16 @@ a:visited {
 
 .homepage_description {
     margin-left: 16px;
+}
+
+.hidden {
+    display: none;
+}
+
+.new-button {
+    padding: 15px 0px 15px 30px;
+}
+
+input[readonly] {
+    background-color: #BEBDB8;
 }
