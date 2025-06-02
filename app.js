@@ -111,7 +111,7 @@ app.get('/recipe-ingredients', async function (req, res) {
 
         // Render the bsg-people.hbs file, and also send the renderer
         //  an object that contains our bsg_people and bsg_homeworld information
-        res.render('recipe-ingredients', { recipeIngredients: recipeIngredients, });
+        res.render('recipe-ingredients', { recipes: recipes, recipeIngredients: recipeIngredients });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
