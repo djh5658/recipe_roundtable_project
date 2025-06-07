@@ -40,8 +40,8 @@ app.get('/users', async function (req, res) {
         const query1 = `SELECT * FROM Users;`;
         const [users] = await db.query(query1);
 
-        // Render the bsg-people.hbs file, and also send the renderer
-        //  an object that contains our bsg_people and bsg_homeworld information
+        // Render the users.hbs file, and also send the renderer
+        //  an object that contains our user information
         res.render('users', { users: users, });
     } catch (error) {
         console.error('Error executing queries:', error);
@@ -66,7 +66,7 @@ app.get('/recipes', async function (req, res) {
         const [recipes] = await db.query(query1);
         const [recipeDetails] = await db.query(query2);
 
-        // Render the recips.hbs file, and also send the renderer
+        // Render the recipes.hbs file, and also send the renderer
         //  an object that contains our recipe information
         res.render('recipes', { recipes: recipes, recipeDetails: recipeDetails });
     } catch (error) {
@@ -81,12 +81,12 @@ app.get('/recipes', async function (req, res) {
 app.get('/ingredients', async function (req, res) {
     try {
         // Create and execute our queries
-        // In query1, we use a JOIN clause to display the names of the homeworlds
+       
         const query1 = `SELECT * FROM Ingredients;`;
         const [ingredients] = await db.query(query1);
 
-        // Render the bsg-people.hbs file, and also send the renderer
-        //  an object that contains our bsg_people and bsg_homeworld information
+        // Render the ingredients.hbs file, and also send the renderer
+        //  an object that contains our ingredients information
         res.render('ingredients', { ingredients: ingredients, });
     } catch (error) {
         console.error('Error executing queries:', error);
@@ -109,8 +109,8 @@ app.get('/recipe-ingredients', async function (req, res) {
         const [recipes] = await db.query(query);
         const [recipeIngredients] = await db.query(query1);
 
-        // Render the bsg-people.hbs file, and also send the renderer
-        //  an object that contains our bsg_people and bsg_homeworld information
+        // Render the recipe-ingredients.hbs file, and also send the renderer
+        //  an object that contains our recipe-ingredients and recipes information
         res.render('recipe-ingredients', { recipes: recipes, recipeIngredients: recipeIngredients });
     } catch (error) {
         console.error('Error executing queries:', error);
@@ -125,20 +125,17 @@ app.get('/instructions', async function (req, res) {
     try {
         // Create and execute our queries
 
-        const query = `SELECT Instructions.instructionID, Recipes.title, Instructions.recipeID, Instructions.instructionText, Instructions.sortOrder
+        const query1 = `SELECT Instructions.instructionID, Recipes.title, Instructions.recipeID, Instructions.instructionText, Instructions.sortOrder
         FROM Instructions
         JOIN Recipes on Instructions.recipeID = Recipes.recipeID;`;
-        const query1 = `SELECT Instructions.instructionID, Recipes.title, \
-        Instructions.instructionText, Instructions.sortOrder\
-        FROM Instructions JOIN Recipes ON Instructions.recipeID = Recipes.recipeID `;
         const query2 = `SELECT Recipes.title, Recipes.recipeID FROM Recipes;`
 
-        const [instructions] = await db.query(query);
+        const [instructions] = await db.query(query1);
         const [recipes] = await db.query(query2);
 
         // Render the bsg-people.hbs file, and also send the renderer
         //  an object that contains our bsg_people and bsg_homeworld information
-        res.render('instructions', { instructions: instructions });
+        res.render('instructions', { instructions: instructions, recipes: recipes });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -168,7 +165,6 @@ app.post('/reset', async function (req, res) {
 // # Date: 5/21/2025
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
-
 
 // CREATE ROUTES
 app.post('/users/create', async function (req, res) {
@@ -207,8 +203,6 @@ app.post('/users/create', async function (req, res) {
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
 
-
-// CREATE ROUTES
 app.post('/recipes/create', async function (req, res) {
     try {
         // Parse frontend form information
@@ -245,7 +239,6 @@ app.post('/recipes/create', async function (req, res) {
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
 
-
 app.post('/ingredients/create', async function (req, res) {
     try {
         // Parse frontend form information
@@ -279,7 +272,6 @@ app.post('/ingredients/create', async function (req, res) {
 // # Date: 5/27/2025
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
-
 
 app.post('/recipe-ingredients/create', async function (req, res) {
     try {
@@ -317,7 +309,6 @@ app.post('/recipe-ingredients/create', async function (req, res) {
 // # Date: 5/27/2025
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
-
 
 app.post('/instructions/create', async function (req, res) {
     try {
@@ -393,7 +384,6 @@ app.post('/users/update', async function (req, res) {
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
 
-// UPDATE ROUTES
 app.post('/recipes/update', async function (req, res) {
     try {
         // Parse frontend form information
@@ -465,7 +455,6 @@ app.post('/ingredients/update', async function (req, res) {
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
 
-// UPDATE ROUTES
 app.post('/recipe-ingredients/update', async function (req, res) {
     try {
         // Parse frontend form information
@@ -504,7 +493,6 @@ app.post('/recipe-ingredients/update', async function (req, res) {
 // # Copied from /OR/ Adapted from /OR/ Based on:
 // # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
 
-// UPDATE ROUTES
 app.post('/instructions/update', async function (req, res) {
     try {
         // Parse frontend form information
