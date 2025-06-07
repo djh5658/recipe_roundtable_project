@@ -53,7 +53,7 @@
         <select name='create_recipe_user' id='create_recipe_user' required>
             <option value='' disabled selected>Select a user</option>
             {{#each recipes}}
-            <option value="{{this.userID}}" required>
+            <option value='{{this.userID}}' required>
                 {{this.user}} - {{this.userID}}
             </option>
             {{/each}}
