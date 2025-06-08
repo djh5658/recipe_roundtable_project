@@ -89,9 +89,7 @@
       <option value="" disabled selected>Select a Recipe</option>
       {{#each recipes}}
         <option value="{{this.title}}" required>
-          {{this.recipeID}}
-          -
-          {{this.title}}
+          {{this.title}} ({{this.recipeID}})
         </option>
       {{/each}}
     </select>

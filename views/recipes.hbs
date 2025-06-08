@@ -49,12 +49,12 @@
     <h2>Create a Recipe</h2>
     <form class='cuForm' id='create_recipe_form' method='POST' action='/recipes/create'>
 
-        <label for='create_recipe_user'>User ID: </label>
+        <label for='create_recipe_user'>User:</label>
         <select name='create_recipe_user' id='create_recipe_user' required>
             <option value='' disabled selected>Select a user</option>
             {{#each recipes}}
             <option value='{{this.userID}}' required>
-                {{this.user}} - {{this.userID}}
+                {{this.user}} ({{this.userID}})
             </option>
             {{/each}}
         </select>

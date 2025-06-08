@@ -83,19 +83,17 @@
     action="/recipe-ingredients/create"
   >
 
-    <label for="create_ri_recipe_title">Recipe ID: </label>
+    <label for="create_ri_recipe_title">Recipe: </label>
     <select name="create_ri_recipe_title" id="create_ri_recipe_title" required>
       <option value="" disabled selected>Select a Recipe</option>
       {{#each recipes}}
         <option value="{{this.title}}" required>
-          {{this.recipeID}}
-          -
-          {{this.title}}
+          {{this.title}} ({{this.recipeID}})
         </option>
       {{/each}}
     </select>
 
-    <label for="create_ri_ingredient_name">Ingredient ID: </label>
+    <label for="create_ri_ingredient_name">Ingredient </label>
     <select
       name="create_ri_ingredient_name"
       id="create_ri_ingredient_name"
@@ -104,9 +102,7 @@
       <option value="" disabled selected>Select a Ingredient</option>
       {{#each recipeIngredients}}
         <option value="{{this.name}}" required>
-          {{this.ingredientID}}
-          -
-          {{this.name}}
+          {{this.name}} ({{this.ingredientID}})
         </option>
       {{/each}}
     </select>
@@ -169,9 +165,7 @@
       <option value="" disabled selected>Select a Ingredient</option>
       {{#each recipeIngredients}}
         <option value="{{this.name}}" required>
-          {{this.ingredientID}}
-          -
-          {{this.name}}
+          {{this.name}} ({{this.ingredientID}})
         </option>
       {{/each}}
     </select>
