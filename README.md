@@ -19,6 +19,7 @@ OSU CS340 Module Resources (4/29/25) https://canvas.oregonstate.edu/courses/1999
 
 Resource used for starting code for various files (app.js, PL.sql, handlebar templates)
 OSU CS340 Module Resources (5/5/25) Citing Starter Code https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+
 OSU CS340 Module Resources (5/24/25) Citing Starter Code for CUD Operations https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
 
 
