@@ -1,3 +1,8 @@
+// # Citation for the SETUP and ROUTE HANDLERS sections:
+// # Date: 5/7/2025
+// # Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+
 // Get an instance of mysql we can use in the app
 let mysql = require('mysql2')
 
