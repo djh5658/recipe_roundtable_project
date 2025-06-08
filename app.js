@@ -1,3 +1,8 @@
+// # Citation for the SETUP and ROUTE HANDLERS sections:
+// # Date: 5/5/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+
 // ########################################
 // ########## SETUP
 
@@ -63,12 +68,15 @@ app.get('/recipes', async function (req, res) {
         FROM Recipes AS r \
         JOIN Instructions AS i ON i.recipeID = r.recipeID \
         ORDER BY r.recipeID, i.sortOrder ASC; `
+        const query3 = `SELECT userID, CONCAT(Users.firstName, ' ', Users.lastName) AS 'user' FROM Users;`;
+
         const [recipes] = await db.query(query1);
         const [recipeDetails] = await db.query(query2);
+        const [users] = await db.query(query3);
 
         // Render the recipes.hbs file, and also send the renderer
         //  an object that contains our recipe information
-        res.render('recipes', { recipes: recipes, recipeDetails: recipeDetails });
+        res.render('recipes', { recipes: recipes, recipeDetails: recipeDetails, users: users });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -81,7 +89,7 @@ app.get('/recipes', async function (req, res) {
 app.get('/ingredients', async function (req, res) {
     try {
         // Create and execute our queries
-       
+
         const query1 = `SELECT * FROM Ingredients;`;
         const [ingredients] = await db.query(query1);
 
@@ -101,17 +109,21 @@ app.get('/recipe-ingredients', async function (req, res) {
     try {
         // Create and execute our queries
 
-        const query = `SELECT DISTINCT ri.recipeID, r.title FROM RecipeIngredients AS ri JOIN Recipes AS r ON r.recipeID = ri.RecipeID`;
-        const query1 = `SELECT RecipeIngredients.recipeIngredientID, Recipes.recipeID, Recipes.title, Ingredients.ingredientID, Ingredients.name, 
+        const query1 = `SELECT DISTINCT ri.recipeID, r.title FROM RecipeIngredients AS ri JOIN Recipes AS r ON r.recipeID = ri.RecipeID`;
+        const query2 = `SELECT RecipeIngredients.recipeIngredientID, Recipes.recipeID, Recipes.title, Ingredients.ingredientID, Ingredients.name, 
         RecipeIngredients.quantity, RecipeIngredients.description FROM RecipeIngredients
         JOIN Recipes ON RecipeIngredients.recipeID = Recipes.recipeID
         JOIN Ingredients ON RecipeIngredients.ingredientID = Ingredients.ingredientID;`;
-        const [recipes] = await db.query(query);
-        const [recipeIngredients] = await db.query(query1);
+        const query3 = `SELECT recipeID, title FROM Recipes;`;
+        const query4 = `SELECT ingredientID, name FROM Ingredients;`;
+        const [recipes] = await db.query(query1);
+        const [recipeIngredients] = await db.query(query2);
+        const [recipe] = await db.query(query3);
+        const [ingredients] = await db.query(query4);
 
         // Render the recipe-ingredients.hbs file, and also send the renderer
         //  an object that contains our recipe-ingredients and recipes information
-        res.render('recipe-ingredients', { recipes: recipes, recipeIngredients: recipeIngredients });
+        res.render('recipe-ingredients', { recipes: recipes, recipeIngredients: recipeIngredients, recipe: recipe, ingredients: ingredients });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser

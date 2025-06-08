@@ -1,3 +1,9 @@
+// # Citation for the following page:
+// # Date: 5/5/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL:
+https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+
 <h1>Recipes</h1>
 
 {{! Recipes Table }}
@@ -29,7 +35,9 @@
                 <form id='delete_recipe_form' method="POST" action="/recipes/delete">
                     <input type='hidden' name='delete_recipe_id' value='{{this.recipeID}}' />
                     <button type='submit'>Delete</button>
-                    <button type="button" class="update-button" data-type='recipe' data-userid="{{this.userID}}" data-recipeid="{{this.recipeID}}" data-title="{{this.title}}" data-recipedesc="{{this.description}}">
+                    <button type="button" class="update-button" data-type='recipe' data-userid="{{this.userID}}"
+                        data-recipeid="{{this.recipeID}}" data-title="{{this.title}}"
+                        data-recipedesc="{{this.description}}">
                         Edit
                     </button>
                 </form>
@@ -49,12 +57,12 @@
     <h2>Create a Recipe</h2>
     <form class='cuForm' id='create_recipe_form' method='POST' action='/recipes/create'>
 
-        <label for='create_recipe_user'>User:</label>
+        <label for='create_recipe_user'>User ID: </label>
         <select name='create_recipe_user' id='create_recipe_user' required>
             <option value='' disabled selected>Select a user</option>
-            {{#each recipes}}
+            {{#each users}}
             <option value='{{this.userID}}' required>
-                {{this.user}} ({{this.userID}})
+                ({{this.userID}}) - {{this.user}}
             </option>
             {{/each}}
         </select>
@@ -63,7 +71,8 @@
         <input type='text' name='create_recipe_title' id='create_recipe_title' required />
 
         <label for='create_recipe_description'>Recipe Description: </label>
-        <textarea id="create_recipe_description" name="create_recipe_description" rows="3" cols="50" placeholder="Enter recipe Description here..."></textarea>
+        <textarea id="create_recipe_description" name="create_recipe_description" rows="3" cols="50"
+            placeholder="Enter recipe Description here..."></textarea>
 
         <div>
             <input class='save-button' type='submit' value="Submit" />
@@ -76,22 +85,17 @@
     {{! UPDATE form }}
     <h2>Update a Recipe</h2>
     <form class='cuForm' id='update_recipe_form' method='POST' action='/recipes/update'>
-    <label for='update_recipe_id'>Recipe to Update: </label>
-  <input
-    type='text'
-    name='update_recipe_id'
-    id='update_recipe_id'
-    readonly
-    required
-  />
-  <label for="update_user_id">User ID: </label>
-<input type="text" id="update_user_id" name="update_user_id" readonly />
+        <label for='update_recipe_id'>Recipe to Update: </label>
+        <input type='text' name='update_recipe_id' id='update_recipe_id' readonly required />
+        <label for="update_user_id">User ID: </label>
+        <input type="text" id="update_user_id" name="update_user_id" readonly />
 
         <label for='update_recipe_title'>Recipe Title: </label>
         <input type='text' name='update_recipe_title' id='update_recipe_title' required />
 
         <label for='update_recipe_description'>Recipe Description: </label>
-        <textarea id="update_recipe_description" name="update_recipe_description" rows="3" cols="50" placeholder="Enter updated recipe Description here..."></textarea>
+        <textarea id="update_recipe_description" name="update_recipe_description" rows="3" cols="50"
+            placeholder="Enter updated recipe Description here..."></textarea>
 
 
         <div>

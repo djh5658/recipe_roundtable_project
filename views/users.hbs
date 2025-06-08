@@ -1,3 +1,9 @@
+// # Citation for the following page:
+// # Date: 5/5/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL:
+https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+
 <h1>Users</h1>
 
 {{! READ table }}
@@ -17,42 +23,27 @@
   <tbody>
     {{! For each row, print the id, firstName, lastName, and Email }}
     {{#each users}}
-      <tr>
-        <td>{{this.userID}}</td>
-        <td>{{this.firstName}}</td>
-        <td>{{this.lastName}}</td>
-        <td>{{this.email}}</td>
+    <tr>
+      <td>{{this.userID}}</td>
+      <td>{{this.firstName}}</td>
+      <td>{{this.lastName}}</td>
+      <td>{{this.email}}</td>
 
-        {{! DELETE form }}
-        <form id="delete_person_form" method="POST" action="/users/delete">
-          <input
-            type="hidden"
-            name="delete_person_id"
-            value="{{this.userID}}"
-          />
-          <input
-            type="hidden"
-            name="delete_person_name"
-            value="{{this.firstName}} {{this.lastName}}"
-          />
-          <td>
-            <button type="submit">
-              Delete
-            </button>
-            <button
-              type="button"
-              class="update-button"
-              data-type="user"
-              data-userid="{{this.userID}}"
-              data-firstname="{{this.firstName}}"
-              data-lastname="{{this.lastName}}"
-              data-email="{{this.email}}"
-            >
-              Edit
-            </button>
-          </td>
-        </form>
-      </tr>
+      {{! DELETE form }}
+      <form id="delete_person_form" method="POST" action="/users/delete">
+        <input type="hidden" name="delete_person_id" value="{{this.userID}}" />
+        <input type="hidden" name="delete_person_name" value="{{this.firstName}} {{this.lastName}}" />
+        <td>
+          <button type="submit">
+            Delete
+          </button>
+          <button type="button" class="update-button" data-type="user" data-userid="{{this.userID}}"
+            data-firstname="{{this.firstName}}" data-lastname="{{this.lastName}}" data-email="{{this.email}}">
+            Edit
+          </button>
+        </td>
+      </form>
+    </tr>
     {{/each}}
 
   </tbody>
@@ -67,46 +58,22 @@
 
 <div class="create-section hidden">
   <h2 id="createUserHeader">Create a User</h2>
-  <form
-    class="cuForm"
-    id="create_user_form"
-    method="POST"
-    action="/users/create"
-  >
+  <form class="cuForm" id="create_user_form" method="POST" action="/users/create">
     <div>
       <label for="create_user_firstName">First Name: </label>
-      <input
-        type="text"
-        name="create_user_firstName"
-        id="create_user_firstName"
-        required
-      />
+      <input type="text" name="create_user_firstName" id="create_user_firstName" required />
     </div>
     <div>
       <label for="create_user_lastName">Last Name: </label>
-      <input
-        type="text"
-        name="create_user_lastName"
-        id="create_user_lastName"
-        required
-      />
+      <input type="text" name="create_user_lastName" id="create_user_lastName" required />
     </div>
     <div>
       <label for="create_user_email">Email: </label>
-      <input
-        type="text"
-        name="create_user_email"
-        id="create_user_email"
-        required
-      />
+      <input type="text" name="create_user_email" id="create_user_email" required />
     </div>
     <div>
       <input class="save-button" type="submit" value="Submit" />
-      <button
-        class="cancel-button"
-        type="button"
-        id="cancel-button"
-      >Cancel</button>
+      <button class="cancel-button" type="button" id="cancel-button">Cancel</button>
     </div>
   </form>
 </div>
@@ -114,52 +81,22 @@
 {{! UPDATE form }}
 <div class="update-section hidden">
   <h2 id="update_user_header">Update a User</h2>
-  <form
-    class="cuForm"
-    id="update_user_form"
-    method="POST"
-    action="/users/update"
-  >
+  <form class="cuForm" id="update_user_form" method="POST" action="/users/update">
     <label for="update_user_id">User to Update: </label>
-    <input
-      type="text"
-      name="update_user_id"
-      id="update_user_id"
-      readonly
-      required
-    />
+    <input type="text" name="update_user_id" id="update_user_id" readonly required />
 
     <label for="update_user_firstName">First Name: </label>
-    <input
-      type="text"
-      name="update_user_firstName"
-      id="update_user_firstName"
-      required
-    />
+    <input type="text" name="update_user_firstName" id="update_user_firstName" required />
 
     <label for="update_user_lastName">Last Name: </label>
-    <input
-      type="text"
-      name="update_user_lastName"
-      id="update_user_lastName"
-      required
-    />
+    <input type="text" name="update_user_lastName" id="update_user_lastName" required />
 
     <label for="update_user_email">Email: </label>
-    <input
-      type="text"
-      name="update_user_email"
-      id="update_user_email"
-      required
-    />
+    <input type="text" name="update_user_email" id="update_user_email" required />
 
     <div>
       <input class="save-button" type="submit" value="Submit" />
-      <button
-        class="cancel-button"
-        type="button"
-        id="cancel-button"
-      >Cancel</button>
+      <button class="cancel-button" type="button" id="cancel-button">Cancel</button>
     </div>
 
   </form>

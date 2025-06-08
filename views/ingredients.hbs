@@ -1,3 +1,9 @@
+// # Citation for the following page:
+// # Date: 5/5/2025
+// # Copied from /OR/ Adapted from /OR/ Based on:
+// # Source URL:
+https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+
 <h1>Ingredients</h1>
 
 {{! READ table }}
@@ -14,42 +20,25 @@
   <tbody>
     {{! For each row, print the ingredientId and name }}
     {{#each ingredients}}
-      <tr>
-        <td>{{this.ingredientID}}</td>
-        <td>{{this.name}}</td>
+    <tr>
+      <td>{{this.ingredientID}}</td>
+      <td>{{this.name}}</td>
 
-        {{! DELETE form }}
-        <form
-          id="delete_ingredient_form"
-          method="POST"
-          action="/ingredients/delete"
-        >
-          <input
-            type="hidden"
-            name="delete_ingredient_id"
-            value="{{this.ingredientID}}"
-          />
-          <input
-            type="hidden"
-            name="delete_ingredient_name"
-            value="{{this.name}}"
-          />
-          <td>
-            <button type="submit">
-              Delete
-            </button>
-            <button
-              type="button"
-              class="update-button"
-              data-type="ingredient"
-              data-ingredientid="{{this.ingredientID}}"
-              data-name="{{this.name}}"
-            >
-              Edit
-            </button>
-          </td>
-        </form>
-      </tr>
+      {{! DELETE form }}
+      <form id="delete_ingredient_form" method="POST" action="/ingredients/delete">
+        <input type="hidden" name="delete_ingredient_id" value="{{this.ingredientID}}" />
+        <input type="hidden" name="delete_ingredient_name" value="{{this.name}}" />
+        <td>
+          <button type="submit">
+            Delete
+          </button>
+          <button type="button" class="update-button" data-type="ingredient" data-ingredientid="{{this.ingredientID}}"
+            data-name="{{this.name}}">
+            Edit
+          </button>
+        </td>
+      </form>
+    </tr>
     {{/each}}
   </tbody>
 </table>
@@ -61,28 +50,14 @@
 {{! CREATE form }}
 <div class="create-section hidden">
   <h2>Add an Ingredient</h2>
-  <form
-    class="cuForm"
-    id="create_ingredient_form"
-    method="POST"
-    action="/ingredients/create"
-  >
+  <form class="cuForm" id="create_ingredient_form" method="POST" action="/ingredients/create">
 
     <label for="create_ingredient">Ingredient: </label>
-    <input
-      type="text"
-      name="create_ingredient"
-      id="create_ingredient"
-      required
-    />
+    <input type="text" name="create_ingredient" id="create_ingredient" required />
 
     <div>
       <input class="save-button" type="submit" value="Submit" />
-      <button
-        class="cancel-button"
-        type="button"
-        id="cancel-button"
-      >Cancel</button>
+      <button class="cancel-button" type="button" id="cancel-button">Cancel</button>
     </div>
   </form>
 </div>
@@ -90,35 +65,16 @@
 {{! UPDATE form }}
 <div class="update-section hidden">
   <h2>Update an Ingredient</h2>
-  <form
-    class="cuForm"
-    id="update_ingredient_form"
-    method="POST"
-    action="/ingredients/update"
-  >
+  <form class="cuForm" id="update_ingredient_form" method="POST" action="/ingredients/update">
     <label for="update_ingredient_id">Ingredient ID: </label>
-    <input
-      type="text"
-      id="update_ingredient_id"
-      name="update_ingredient_id"
-      readonly
-    />
+    <input type="text" id="update_ingredient_id" name="update_ingredient_id" readonly />
 
     <label for="update_ingredient_name">Recipe Ingredient: </label>
-    <input
-      type="text"
-      name="update_ingredient_name"
-      id="update_ingredient_name"
-      required
-    />
+    <input type="text" name="update_ingredient_name" id="update_ingredient_name" required />
 
     <div>
       <input class="save-button" type="submit" value="Submit" />
-      <button
-        class="cancel-button"
-        type="button"
-        id="cancel-button"
-      >Cancel</button>
+      <button class="cancel-button" type="button" id="cancel-button">Cancel</button>
     </div>
   </form>
 </div>
